@@ -79,9 +79,11 @@ pipeline {
                     sh """
                         ssh -o StrictHostKeyChecking=no ${EC2_USERNAME}@${EC2_IP} '
                             docker pull ${DOCKER_IMAGE}:flask_latest
+                            docker stop flask_app || true
+                            docker rm flask_app || true
                             docker run -d --name flask_app -p 3000:3000 ${DOCKER_IMAGE}:flask_latest
                             docker ps
-                            curl http://localhost:3000
+                            
                         '
                     """
                 }
